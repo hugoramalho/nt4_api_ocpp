@@ -1,0 +1,36 @@
+doctrine_migrations:
+    migrations_paths:
+        # namespace is arbitrary but should be different from App\Migrations
+        # as migrations classes should NOT be autoloaded
+        'DoctrineMigrations': '%kernel.project_dir%/migrations'
+    enable_profiler: false
+
+
+#doctrine_migrations:
+#    em: default
+#    migrations_paths:
+#        'DoctrineMigrations\Default': '%kernel.project_dir%/migrations/default'
+#    storage:
+#        table_storage:
+#            table_name: doctrine_migration_versions_default
+#    all_or_nothing: true
+#    check_database_platform: true
+#doctrine_migrations_idp:
+#    em: idp
+#    migrations_paths:
+#        'DoctrineMigrations\Idp': '%kernel.project_dir%/migrations/idp'
+#    storage:
+#        table_storage:
+#            table_name: doctrine_migration_versions_idp
+#    all_or_nothing: true
+#    check_database_platform: true
+#
+#doctrine_migrations_finance:
+#    em: finance
+#    migrations_paths:
+#        'DoctrineMigrations\Finance': '%kernel.project_dir%/migrations/finance'
+#    storage:
+#        table_storage:
+#            table_name: doctrine_migration_versions_finance
+#    all_or_nothing: true
+#    check_database_platform: true
