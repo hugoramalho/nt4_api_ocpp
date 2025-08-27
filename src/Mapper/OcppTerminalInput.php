@@ -18,4 +18,6 @@ class OcppTerminalInput
     #[Assert\NotBlank]
     public string $protocolVersion;
 
+    public int $station_id;
+
 }
