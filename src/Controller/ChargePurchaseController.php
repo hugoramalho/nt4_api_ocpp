@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route('/api/v1')]
+#[Route('/api/v1/ocpp')]
 class ChargePurchaseController extends BaseController
 {
 

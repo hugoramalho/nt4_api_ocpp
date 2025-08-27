@@ -10,6 +10,7 @@ namespace App\Controller;
 use App\Entity\Station;
 use App\Exception\ApplicationException;
 use App\Mapper\StationInput;
+use App\Service\AuthService;
 use App\Service\StationService;
 use App\Service\User\IdpAuthClient;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,13 +26,13 @@ class StationController extends BaseController
 {
     public function __construct(
         EntityManagerInterface $entityManager,
-        IdpAuthClient $idpAuthClient,
+        AuthService $authService,
         LoggerInterface $logger,
         ValidatorInterface $validator,
-        private StationService $stationService,
+        private StationService $stationService
     )
     {
-        parent::__construct($entityManager, $idpAuthClient, $logger, $validator);
+        parent::__construct($entityManager, $authService, $logger, $validator);
     }
 
     #[Route('/stations', methods: ['GET'], format: 'json')]
