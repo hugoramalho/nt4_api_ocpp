@@ -86,56 +86,57 @@ readonly class ExceptionEventSubscriber implements EventSubscriberInterface
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        $exception = $event->getThrowable();
-        if ($_ENV['APP_ENV'] == 'prod' || $_ENV['APP_ENV'] == 'dev') {
-//            dd($exception);
-            $response = new JsonResponse();
-            // --- Tratamento especial para falhas de Constraint ---
-            if ($exception instanceof ValidationFailedException) {
-                $violations = $exception->getViolations();
-                $errors = [];
-
-                foreach ($violations as $violation) {
-                    $errors[] = sprintf(
-                        "%s: %s",
-                        $violation->getPropertyPath(),
-                        $violation->getMessage()
-                    );
-                }
-
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData([
-                    'success' => false,
-                    'message' => 'Constraint validation exception',
-                    'code' => 0,
-                    'errors' => $errors,
-                ]);
-
-                $event->setResponse($response);
-                return;
-            }
-
-            // Se for uma exceção HTTP
-            if ($exception instanceof HttpExceptionInterface) {
-                $response->setStatusCode($exception->getStatusCode());
-                $message = $exception->getMessage();
-            } elseif ($exception->getCode() == 1) {
-                // Exceção de regra de negócio
-                $message = $exception->getMessage();
-                $response->setStatusCode(400);
-            } else {
-                // Demais exceções internas
-                $message = $exception->getMessage();
-                $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
-
-            $response->setData([
-                'success' => false,
-                'message' => $message,
-                'code' => $exception->getCode(),
-            ]);
-
-            $event->setResponse($response);
-        }
+//        $exception = $event->getThrowable();
+//        dd($exception);
+//        if ($_ENV['APP_ENV'] == 'prod' || $_ENV['APP_ENV'] == 'dev') {
+////            dd($exception);
+//            $response = new JsonResponse();
+//            // --- Tratamento especial para falhas de Constraint ---
+//            if ($exception instanceof ValidationFailedException) {
+//                $violations = $exception->getViolations();
+//                $errors = [];
+//
+//                foreach ($violations as $violation) {
+//                    $errors[] = sprintf(
+//                        "%s: %s",
+//                        $violation->getPropertyPath(),
+//                        $violation->getMessage()
+//                    );
+//                }
+//
+//                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+//                $response->setData([
+//                    'success' => false,
+//                    'message' => 'Constraint validation exception',
+//                    'code' => 0,
+//                    'errors' => $errors,
+//                ]);
+//
+//                $event->setResponse($response);
+//                return;
+//            }
+//
+//            // Se for uma exceção HTTP
+//            if ($exception instanceof HttpExceptionInterface) {
+//                $response->setStatusCode($exception->getStatusCode());
+//                $message = $exception->getMessage();
+//            } elseif ($exception->getCode() == 1) {
+//                // Exceção de regra de negócio
+//                $message = $exception->getMessage();
+//                $response->setStatusCode(400);
+//            } else {
+//                // Demais exceções internas
+//                $message = $exception->getMessage();
+//                $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+//            }
+//
+//            $response->setData([
+//                'success' => false,
+//                'message' => $message,
+//                'code' => $exception->getCode(),
+//            ]);
+//
+//            $event->setResponse($response);
+//        }
     }
 }

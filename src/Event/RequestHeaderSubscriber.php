@@ -8,6 +8,7 @@
 namespace App\Event;
 
 use App\Service\AuthService;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -15,11 +16,12 @@ use Psr\Log\LoggerInterface;
 
 readonly class RequestHeaderSubscriber implements EventSubscriberInterface
 {
-    private LoggerInterface $logger;
+    public function __construct(
+        private LoggerInterface $logger,
+        private JWTTokenManagerInterface $JWTTokenManager,
 
-    public function __construct(LoggerInterface $logger)
+    )
     {
-        $this->logger = $logger;
     }
 
     public static function getSubscribedEvents(): array
@@ -71,6 +73,9 @@ readonly class RequestHeaderSubscriber implements EventSubscriberInterface
 //                "Missing 'X-Client-Agent' or 'X-Client-Application' or 'X-Fingerprint' headers."
 //            );
 //        }
+//        $jwt = $request->headers->get('Authorization');
+//        $payload = $this->JWTTokenManager->decode($jwt);
+
         AuthService::$agent = (int) $request->headers->get('X-Client-Agent');
         AuthService::$application = (int) $request->headers->get('X-Client-application');
         AuthService::$fingerprint = (string) $request->headers->get('X-Fingerprint');

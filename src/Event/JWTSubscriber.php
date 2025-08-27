@@ -7,20 +7,15 @@
 
 namespace App\Event;
 
-use App\Entity\AuthToken;
-use App\Entity\User;
 use App\Service\AuthService;
-use Doctrine\ORM\EntityManagerInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
-use Ramsey\Uuid\Uuid;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 readonly class JWTSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
     )
     {
     }
@@ -32,9 +27,7 @@ readonly class JWTSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @throws \Exception
-     */
+
     public function onJwtDecoded(JWTDecodedEvent $event): void
     {
         $payload = $event->getPayload();
