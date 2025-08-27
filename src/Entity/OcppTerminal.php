@@ -10,6 +10,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -34,6 +35,7 @@ class OcppTerminal extends BaseEntity
     public string $name;
 
     #[ORM\Column(name: 'protocol_version', type: 'string', length: 10, nullable: false)]
+    #[SerializedName('protocol_version')]
     public string $protocolVersion;
 
 }

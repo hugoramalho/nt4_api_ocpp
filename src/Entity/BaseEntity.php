@@ -7,12 +7,12 @@
 
 namespace App\Entity;
 
-use App\External\User\User;
 use Carbon\Carbon;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\MappedSuperclass]
@@ -26,13 +26,14 @@ abstract class BaseEntity
     #[ORM\Column(type: 'integer', nullable: false, options: ['unsigned' => true])]
     public ?int $id;
 
-    #[ORM\Column(name: 'created_by', type: 'string', nullable: false, options: ['unsigned' => true])]
+    #[ORM\Column(name: 'created_by', type: 'string', nullable: true, options: ['unsigned' => true])]
+    #[SerializedName('created_by')]
     public ?string $createdBy = null;
 
-    #[ORM\Column(name: 'updated_by', type: 'string', nullable: false, options: ['unsigned' => true])]
+    #[ORM\Column(name: 'updated_by', type: 'string', nullable: true, options: ['unsigned' => true])]
     public ?string $updatedBy = null;
 
-    #[ORM\Column(name: 'created_at', type: 'carbon', nullable: true)]
+    #[ORM\Column(name: 'created_at', type: 'carbon', nullable: false)]
     public ?Carbon $createdAt = null;
 
     #[ORM\Column('updated_at', type: 'carbon', nullable: true)]
