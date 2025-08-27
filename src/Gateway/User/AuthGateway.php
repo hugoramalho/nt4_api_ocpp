@@ -11,7 +11,6 @@ use App\Exception\IdpAuthException;
 use App\Gateway\AbstractGateway;
 use App\Mapper\AuthInput;
 use App\Service\AuthService;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final readonly class AuthGateway extends AbstractGateway
 {
@@ -42,11 +41,8 @@ final readonly class AuthGateway extends AbstractGateway
                     "IDP auth failed (HTTP STATUS: {$response->getStatusCode()}"
                 );
             }
-
-
+            //
             return $response->toArray(false);
-
-
 
         } catch (IdpAuthException $e) {
             throw $e;
