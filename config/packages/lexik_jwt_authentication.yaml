@@ -1,3 +1,22 @@
 lexik_jwt_authentication:
-    secret_key:   '%kernel.project_dir%/config/jwt/nt4_idp_private_key.pem' # chave privada
     public_key:   '%kernel.project_dir%/config/jwt/nt4_idp_public_key.pem'
+    # Esta aplicação só valida tokens emitidos por um IDP externo,
+    # basta informar a chave pública. (O private pode ser omitido.)
+    # Caso você também emita tokens localmente, mantenha o private + passphrase:
+    # secret_key: '%kernel.project_dir%/config/jwt/private.pem'
+    # pass_phrase: '%env(JWT_PASSPHRASE)%'
+    # Onde o token é extraído (já vem assim por padrão):
+    token_extractors:
+        authorization_header:
+            enabled: true
+            prefix:  Bearer
+            name:    Authorization
+        cookie:
+            enabled: false
+        query_parameter:
+            enabled: false
+    # Qual claim será usada como identidade do usuário (default: "username")
+    # Ajuste para o claim que o seu IDP envia (ex.: "sub" ou "email").
+    user_id_claim: uid
+    allow_no_expiration: true     # aceitar tokens sem 'exp'
+    token_ttl: ~
