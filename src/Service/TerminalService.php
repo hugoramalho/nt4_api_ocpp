@@ -22,6 +22,7 @@ class TerminalService extends BaseService
         $terminal = new OcppTerminal();
         $terminal->name = $terminalInput->name;
         $terminal->protocolVersion = $terminalInput->protocolVersion;
+        $terminal->station = $this->findEntity(Station::class, $terminalInput->station_id);
         $this->entityManager->persist($terminal);
         $this->entityManager->flush();
         return $terminal;
@@ -30,12 +31,11 @@ class TerminalService extends BaseService
     public function update(OcppTerminalInput $ocppTerminalInput, OcppTerminal $ocppTerminal): OcppTerminal
     {
         $this->validate($ocppTerminalInput);
-        if(!$station = $this->entityManager->getRepository(Station::class)->find($ocppTerminalInput->id)) {
-            throw new NotFoundHttpException('Station not found');
-        }
-        $station->name = $station->name ?? $ocppTerminal->name;
+        $ocppTerminal->name = $ocppTerminalInput->name ?? $ocppTerminal->name;
+        $ocppTerminal->protocolVersion = $ocppTerminalInput->protocolVersion ?? $ocppTerminal->protocolVersion;
+        $ocppTerminal->station = $this->findEntity(Station::class, $ocppTerminalInput->station_id, false) ?? $ocppTerminal->station;
         $this->entityManager->flush();
-        return $station;
+        return $ocppTerminal;
     }
 
     public function delete(OcppTerminal $station): OcppTerminal

@@ -7,6 +7,7 @@
 
 namespace App\Service;
 
+use App\Repository\BaseRepositoryTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
@@ -14,6 +15,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class BaseService
 {
+    use BaseRepositoryTrait;
     public function __construct(
         protected EntityManagerInterface $entityManager,
         protected LoggerInterface $logger,
@@ -29,4 +31,6 @@ abstract class BaseService
             throw new ValidationFailedException($object, $violations);
         }
     }
+
+
 }
