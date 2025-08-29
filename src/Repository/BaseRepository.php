@@ -5,9 +5,9 @@
  * Created at: 26/08/2025
  **/
 
+
 namespace App\Repository;
 
-class BaseRepository
+final class BaseRepository
 {
-
 }
