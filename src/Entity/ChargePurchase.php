@@ -26,9 +26,9 @@ class ChargePurchase extends BaseEntity
     #[\App\Validator\Uuid]
     public string $uuid;
 
-    #[ORM\ManyToOne(targetEntity: OcppTerminal::class, cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: OcppDevice::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'ocpp_terminal_id', referencedColumnName: 'id', nullable: false, options: ['unsigned' => true])]
-    public OcppTerminal $terminal;
+    public OcppDevice $terminal;
 
     #[ORM\Column(name: 'banking_transaction_uuid', type: 'string', nullable: true)]
     public string $purchaseTransactionUuid;
