@@ -10,13 +10,22 @@ namespace App\Service;
 use App\Entity\OcppTerminal;
 use App\Entity\Station;
 use App\Mapper\StationInput;
-use App\Mapper\OcppTerminalInput;
+use App\Mapper\OcppDeviceInput;
 use Symfony\Component\Console\Terminal;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TerminalService extends BaseService
 {
-    public function create(OcppTerminalInput $terminalInput): OcppTerminal
+    /**
+     * @param array $parameters
+     * @return OcppTerminal[]
+     */
+    public function query(array $parameters = []): array
+    {
+        return $this->entityManager->getRepository(OcppTerminal::class)->findBy($parameters);
+    }
+
+    public function create(OcppDeviceInput $terminalInput): OcppTerminal
     {
         $this->validate($terminalInput);
         $terminal = new OcppTerminal();
@@ -28,7 +37,7 @@ class TerminalService extends BaseService
         return $terminal;
     }
 
-    public function update(OcppTerminalInput $ocppTerminalInput, OcppTerminal $ocppTerminal): OcppTerminal
+    public function update(OcppDeviceInput $ocppTerminalInput, OcppTerminal $ocppTerminal): OcppTerminal
     {
         $this->validate($ocppTerminalInput);
         $ocppTerminal->name = $ocppTerminalInput->name ?? $ocppTerminal->name;
