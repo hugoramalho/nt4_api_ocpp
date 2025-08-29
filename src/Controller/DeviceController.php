@@ -35,7 +35,7 @@ class DeviceController extends BaseController
         LoggerInterface        $logger,
         ValidatorInterface     $validator,
         SerializerInterface    $serializer,
-        private DeviceService  $terminalService,
+        private DeviceService  $deviceService,
     )
     {
         parent::__construct($entityManager, $authService, $logger, $validator, $serializer);
@@ -46,9 +46,17 @@ class DeviceController extends BaseController
      */
     #[Route('/devices', methods: ['GET'], format: 'json')]
     public function query(
-        #[MapQueryString]  DeviceQueryParams $queryParams,
+        #[MapQueryString]  DeviceQueryParams $queryParams
     ): JsonResponse
     {
+        if ($queryParams->queryAll) {
+            return $this->jsonResponse(
+                $this->deviceService->query(),
+                '',
+                200
+            );
+        }
+        //
         return $this->jsonResponse(
             $this->searchPaginated(
                 OcppDevice::class,
@@ -62,20 +70,6 @@ class DeviceController extends BaseController
             '',
             200
         );
-//        return $this->jsonResponse(
-//
-//            $this->searchPaginated(
-//                OcppDevice::class,
-//                $queryParams,
-//                [
-//                    'like' => ['name'],
-//                    'defaultSort' => 'name',
-//                    'defaultDir'  => 'asc'
-//                ]
-//            ),
-//            '',
-//            200
-//        );
     }
 
 //    #[Route('/devices', methods: ['GET'], format: 'json')]
@@ -130,7 +124,7 @@ class DeviceController extends BaseController
     ): JsonResponse
     {
         return $this->jsonResponse(
-            $this->terminalService->create($terminalInput),
+            $this->deviceService->create($terminalInput),
             'Device successfully created.',
             201
         );
@@ -146,7 +140,7 @@ class DeviceController extends BaseController
     ): JsonResponse
     {
         return $this->jsonResponse(
-            $this->terminalService->update(
+            $this->deviceService->update(
                 $terminalInput,
                 $this->findEntity(OcppDevice::class, $id)
             ),

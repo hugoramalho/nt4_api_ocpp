@@ -7,9 +7,12 @@
 
 namespace App\Controller;
 
+use App\Entity\OcppDevice;
 use App\Entity\Station;
 use App\Exception\ApplicationException;
+use App\Mapper\DeviceQueryParams;
 use App\Mapper\StationInput;
+use App\Mapper\StationQueryParams;
 use App\Service\AuthService;
 use App\Service\StationService;
 use App\Service\User\IdpAuthClient;
@@ -17,6 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -38,11 +42,29 @@ class StationController extends BaseController
     }
 
     #[Route('/stations', methods: ['GET'], format: 'json')]
-    public function query(Request $request): JsonResponse
+    public function query(
+        #[MapQueryString]  StationQueryParams $queryParams
+    ): JsonResponse
     {
+        if ($queryParams->queryAll) {
+            return $this->jsonResponse(
+                $this->stationService->query(),
+                '',
+                200
+            );
+        }
+        //
         return $this->jsonResponse(
-            $this->stationService->query($request->query->all()),
-            'Station successfully updated.',
+            $this->searchPaginated(
+                Station::class,
+                $queryParams,
+                [
+                    'like' => ['name'],
+                    'defaultSort' => 'name',
+                    'defaultDir'  => 'asc'
+                ]
+            ),
+            '',
             200
         );
     }
