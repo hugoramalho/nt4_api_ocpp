@@ -14,6 +14,15 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class StationService extends BaseService
 {
 
+    /**
+     * @param array $parameters
+     * @return Station[]
+     */
+    public function query(array $parameters = []): array
+    {
+        return $this->entityManager->getRepository(Station::class)->findBy($parameters);
+    }
+
     public function create(StationInput $stationInput): Station
     {
         $this->validate($stationInput);

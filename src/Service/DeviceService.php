@@ -7,47 +7,47 @@
 
 namespace App\Service;
 
-use App\Entity\OcppTerminal;
+use App\Entity\OcppDevice;
 use App\Entity\Station;
 use App\Mapper\StationInput;
 use App\Mapper\OcppDeviceInput;
 use Symfony\Component\Console\Terminal;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class TerminalService extends BaseService
+class DeviceService extends BaseService
 {
     /**
      * @param array $parameters
-     * @return OcppTerminal[]
+     * @return OcppDevice[]
      */
     public function query(array $parameters = []): array
     {
-        return $this->entityManager->getRepository(OcppTerminal::class)->findBy($parameters);
+        return $this->entityManager->getRepository(OcppDevice::class)->findBy($parameters);
     }
 
-    public function create(OcppDeviceInput $terminalInput): OcppTerminal
+    public function create(OcppDeviceInput $terminalInput): OcppDevice
     {
         $this->validate($terminalInput);
-        $terminal = new OcppTerminal();
+        $terminal = new OcppDevice();
         $terminal->name = $terminalInput->name;
         $terminal->protocolVersion = $terminalInput->protocolVersion;
-        $terminal->station = $this->findEntity(Station::class, $terminalInput->station_id);
+        $terminal->station = $this->findEntity(Station::class, $terminalInput->stationId);
         $this->entityManager->persist($terminal);
         $this->entityManager->flush();
         return $terminal;
     }
 
-    public function update(OcppDeviceInput $ocppTerminalInput, OcppTerminal $ocppTerminal): OcppTerminal
+    public function update(OcppDeviceInput $OcppDeviceInput, OcppDevice $OcppDevice): OcppDevice
     {
-        $this->validate($ocppTerminalInput);
-        $ocppTerminal->name = $ocppTerminalInput->name ?? $ocppTerminal->name;
-        $ocppTerminal->protocolVersion = $ocppTerminalInput->protocolVersion ?? $ocppTerminal->protocolVersion;
-        $ocppTerminal->station = $this->findEntity(Station::class, $ocppTerminalInput->station_id, false) ?? $ocppTerminal->station;
+        $this->validate($OcppDeviceInput);
+        $OcppDevice->name = $OcppDeviceInput->name ?? $OcppDevice->name;
+        $OcppDevice->protocolVersion = $OcppDeviceInput->protocolVersion ?? $OcppDevice->protocolVersion;
+        $OcppDevice->station = $this->findEntity(Station::class, $OcppDeviceInput->stationId, false) ?? $OcppDevice->station;
         $this->entityManager->flush();
-        return $ocppTerminal;
+        return $OcppDevice;
     }
 
-    public function delete(OcppTerminal $station): OcppTerminal
+    public function delete(OcppDevice $station): OcppDevice
     {
         $station->deleted = true;
         $this->entityManager->flush();
