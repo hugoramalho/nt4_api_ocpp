@@ -12,10 +12,12 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 class BaseQueryParams
 {
     public readonly int $page;
-
     #[SerializedName('page_size')]
     public readonly int $pageSize;
     #[SerializedName('max_page_size')]
     public readonly int $maxPageSize;
-
+    public readonly bool $eager;
+    #[SerializedName('query_all')]
+    public readonly bool $queryAll;
 }
+

@@ -16,13 +16,15 @@ class DeviceQueryParams extends BaseQueryParams
         public readonly int $page = 1,
         public readonly int $pageSize = 20,
         public readonly int $maxPageSize = 100,
+        public readonly bool $eager = true,
+        public readonly bool $queryAll = false,
+        //
         public readonly ?string $name = null,
         public readonly ?string $uuid = null,
         #[SerializedName('protocol_version')]
         public readonly ?string $protocolVersion = null,
     )
     {
-
     }
 
 }

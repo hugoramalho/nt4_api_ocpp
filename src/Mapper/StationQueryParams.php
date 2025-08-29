@@ -16,6 +16,7 @@ class StationQueryParams extends BaseQueryParams
         public readonly int $page = 1,
         public readonly int $pageSize = 20,
         public readonly int $maxPageSize = 100,
+        public readonly bool $queryAll = false,
         public readonly ?string $name = null
     )
     {
