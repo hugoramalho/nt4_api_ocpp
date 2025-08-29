@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/v1/ocpp')]
@@ -29,16 +30,37 @@ class StationController extends BaseController
         AuthService $authService,
         LoggerInterface $logger,
         ValidatorInterface $validator,
-        private StationService $stationService
+        SerializerInterface $serializer,
+        private readonly StationService $stationService
     )
     {
-        parent::__construct($entityManager, $authService, $logger, $validator);
+        parent::__construct($entityManager, $authService, $logger, $validator, $serializer);
     }
 
     #[Route('/stations', methods: ['GET'], format: 'json')]
-    public function get(Request $request): JsonResponse
+    public function query(Request $request): JsonResponse
     {
-        return new JsonResponse(['teste']);
+        return $this->jsonResponse(
+            $this->stationService->query($request->query->all()),
+            'Station successfully updated.',
+            200
+        );
+    }
+
+    /**
+     * @throws ApplicationException
+     */
+    #[Route('/stations/{id}', methods: ['GET'], format: 'json')]
+    public function get(
+        int $id,
+        Request $request
+    ): JsonResponse
+    {
+        return $this->jsonResponse(
+            $this->findEntity(Station::class, $id),
+            'Station successfully updated.',
+            200
+        );
     }
 
     #[Route('/stations', methods: ['POST'], format: 'json')]
@@ -46,11 +68,9 @@ class StationController extends BaseController
         #[MapRequestPayload] StationInput $stationInput
     ): JsonResponse
     {
-        $station = $this->stationService->create($stationInput);
-        return new JsonResponse([
-            'success' => true,
-            'data' => $station
-        ],
+        return $this->jsonResponse(
+            $this->stationService->create($stationInput),
+            'Station successfully created.',
             201
         );
     }
@@ -64,12 +84,10 @@ class StationController extends BaseController
         #[MapRequestPayload] StationInput $stationInput
     ): JsonResponse
     {
-        $station = $this->stationService->update($stationInput, $this->findEntity(Station::class, $id));
-        return new JsonResponse([
-            'success' => true,
-            'data' => $station
-        ],
-            200
+        return $this->jsonResponse(
+            $this->stationService->update($stationInput, $this->findEntity(Station::class, $id)),
+            'Station successfully updated.',
+            201
         );
     }
 
@@ -80,10 +98,10 @@ class StationController extends BaseController
     public function delete(int $id): JsonResponse
     {
         $this->stationService->delete($this->findEntity(Station::class, $id));
-        return new JsonResponse([
-            'success' => true
-        ],
-            200
+        return $this->jsonResponse(
+            [],
+            'Station successfully deleted.',
+            201
         );
     }
 

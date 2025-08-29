@@ -7,48 +7,109 @@
 
 namespace App\Controller;
 
-use App\Entity\OcppTerminal;
-use App\Entity\Station;
+use App\Entity\OcppDevice;
 use App\Exception\ApplicationException;
-use App\Mapper\OcppTerminalInput;
+use App\Mapper\BaseQueryParams;
+use App\Mapper\DeviceQueryParams;
+use App\Mapper\OcppDeviceInput;
+use App\Mapper\ResponseOutput;
 use App\Service\AuthService;
-use App\Service\TerminalService;
+use App\Service\DeviceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/v1/ocpp')]
-class TerminalController extends BaseController
+class DeviceController extends BaseController
 {
     public function __construct(
         EntityManagerInterface $entityManager,
-        AuthService $authService,
-        LoggerInterface $logger,
-        ValidatorInterface $validator,
-        SerializerInterface $serializer,
-        private TerminalService $terminalService,
+        AuthService            $authService,
+        LoggerInterface        $logger,
+        ValidatorInterface     $validator,
+        SerializerInterface    $serializer,
+        private DeviceService  $terminalService,
     )
     {
         parent::__construct($entityManager, $authService, $logger, $validator, $serializer);
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     #[Route('/devices', methods: ['GET'], format: 'json')]
-    public function query(Request $request): JsonResponse
+    public function query(
+        #[MapQueryString]  DeviceQueryParams $queryParams,
+    ): JsonResponse
     {
-        return new JsonResponse([
-            'success' => true,
-            'data' => $this->terminalService->query(
-                $request->query->all()
-            )
-        ]);
+        return $this->jsonResponse(
+            $this->searchPaginated(
+                OcppDevice::class,
+                $queryParams,
+                [
+                    'like' => ['name'],
+                    'defaultSort' => 'name',
+                    'defaultDir'  => 'asc'
+                ]
+            ),
+            '',
+            200
+        );
+//        return $this->jsonResponse(
+//
+//            $this->searchPaginated(
+//                OcppDevice::class,
+//                $queryParams,
+//                [
+//                    'like' => ['name'],
+//                    'defaultSort' => 'name',
+//                    'defaultDir'  => 'asc'
+//                ]
+//            ),
+//            '',
+//            200
+//        );
     }
+
+//    #[Route('/devices', methods: ['GET'], format: 'json')]
+//    public function query(
+//        #[MapQueryString]  BaseQueryParams $queryParams,
+//        Request $request
+//    ): JsonResponse
+//    {
+//        return $this->jsonResponse(
+//            $this->searchPaginated(
+//                OcppDevice::class,
+//                $queryParams,
+//                [
+//                    'like' => ['name'],
+//                    'sortMap' => ['name' => 'e.name', 'stationId' => 'e.stationId', 'createdAt' => 'e.createdAt'],
+//                    'defaultSort' => 'name',
+//                    'defaultDir'  => 'asc',
+//                    'transform' => static fn(OcppDevice $object) => [
+//                        'id' => $object->id,
+//                        'station_id' => $object->getStationId(),
+//                        'name' => $object->getName(),
+//                        'protocol_version' => $object->getProtocolVersion(),
+//                        'created_at' => $object->getCreatedAt()?->format(DATE_ATOM),
+//                    ],
+//                ]
+//            ),
+//            '',
+//            200
+//        );
+//    }
+
     /**
      * @throws ApplicationException
+     * @throws ExceptionInterface
      */
     #[Route('/devices/{uuid}', methods: ['GET'], format: 'json')]
     public function get(
@@ -56,20 +117,20 @@ class TerminalController extends BaseController
         Request $request
     ): JsonResponse
     {
-        return new JsonResponse([
-            'success' => true,
-            'data' => $this->findEntity(OcppTerminal::class, $uuid)
-        ]);
+        return $this->jsonResponse(
+            $this->findEntity(OcppDevice::class, $uuid),
+            '',
+            201
+        );
     }
 
     #[Route('/devices', methods: ['POST'], format: 'json')]
     public function post(
-        #[MapRequestPayload] OcppTerminalInput $terminalInput,
+        #[MapRequestPayload] OcppDeviceInput $terminalInput,
     ): JsonResponse
     {
-        $terminal = $this->terminalService->create($terminalInput);
         return $this->jsonResponse(
-            $terminal,
+            $this->terminalService->create($terminalInput),
             'Device successfully created.',
             201
         );
@@ -81,18 +142,16 @@ class TerminalController extends BaseController
     #[Route('/devices/{id}', methods: ['PUT'], format: 'json')]
     public function put(
         int                                    $id,
-        #[MapRequestPayload] OcppTerminalInput $terminalInput
+        #[MapRequestPayload] OcppDeviceInput $terminalInput
     ): JsonResponse
     {
-        $terminal = $this->terminalService->update(
-            $terminalInput,
-            $this->findEntity(OcppTerminal::class, $id)
-        );
-        return new JsonResponse([
-            'success' => true,
-            'data' => $terminal
-        ],
-            200
+        return $this->jsonResponse(
+            $this->terminalService->update(
+                $terminalInput,
+                $this->findEntity(OcppDevice::class, $id)
+            ),
+            'Device successfully updated.',
+            201
         );
     }
 

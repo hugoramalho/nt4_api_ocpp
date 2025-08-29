@@ -7,11 +7,17 @@
 
 namespace App\Controller;
 
+use App\Entity\BaseEntity;
+use App\Repository\BaseRepository;
 use App\Repository\BaseRepositoryTrait;
 use App\Service\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -23,7 +29,8 @@ abstract class BaseController extends AbstractController
         protected EntityManagerInterface $entityManager,
         protected AuthService            $authService,
         protected LoggerInterface        $logger,
-        protected ValidatorInterface     $validator
+        protected ValidatorInterface     $validator,
+        protected SerializerInterface    $serializer
     )
     {
     }
@@ -36,4 +43,30 @@ abstract class BaseController extends AbstractController
         }
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
+    public function jsonResponse(
+        mixed       $data = null,
+        ?string     $message = null,
+        int         $statusCode = 200,
+        array       $headers = []
+    ): JsonResponse
+    {
+        return new JsonResponse(
+            $this->serializer->serialize([
+                'success' => ($statusCode >= 200 && $statusCode < 300),
+                'message' => $message,
+                'data' => $data
+            ],
+                'json'
+            ),
+            $statusCode,
+            $headers,
+            true
+        );
+    }
+
 }
+
+
