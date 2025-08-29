@@ -9,5 +9,14 @@ namespace App\Mapper;
 
 class ResponseOutput
 {
+    public function __construct(
+        public readonly ?array           $data,
+        public readonly ?string          $message,
+        public readonly ?PaginatorOutput $pagination = null,
+        public ?bool                     $success = null,
+        public ?array                    $errors = null
+    )
+    {
+    }
 
 }

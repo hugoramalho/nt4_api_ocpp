@@ -7,17 +7,21 @@
 
 namespace App\Mapper;
 
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class OcppTerminalInput
+class OcppDeviceInput
 {
 
     #[Assert\NotBlank]
     public string $name;
 
     #[Assert\NotBlank]
+    #[SerializedName('protocol_version')]
     public string $protocolVersion;
 
-    public int $station_id;
+    #[Assert\NotBlank]
+    #[SerializedName('station_id')]
+    public int $stationId;
 
 }
