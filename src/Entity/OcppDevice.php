@@ -10,6 +10,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -25,11 +26,13 @@ class OcppDevice extends BaseEntity
     #[ORM\Column(type: Types::STRING, length: 45, nullable: false)]
     #[Assert\NotBlank(message: "User uuid cannot be empty.")]
     #[\App\Validator\Uuid]
+    #[Ignore]
     public string $uuid;
 
     #[ORM\ManyToOne(targetEntity: Station::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name: 'ocpp_station_id', referencedColumnName: 'id', nullable: false, options: ['unsigned' => true])]
-    public Station $station;
+    #[ORM\JoinColumn(name: 'ocpp_station_id', referencedColumnName: 'id', nullable: true, options: ['unsigned' => true])]
+    #[Ignore]
+    public ?Station $station = null;
 
     #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     public string $name;
@@ -37,6 +40,13 @@ class OcppDevice extends BaseEntity
     #[ORM\Column(name: 'protocol_version', type: 'string', length: 10, nullable: false)]
     #[SerializedName('protocol_version')]
     public string $protocolVersion;
+
+    #[SerializedName('station_id')]
+    public ?int $stationId {
+        get {
+            return $this->station?->id ?? null;
+        }
+    }
 
 }
 

@@ -12,6 +12,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -31,14 +32,19 @@ abstract class BaseEntity
     public ?string $createdBy = null;
 
     #[ORM\Column(name: 'updated_by', type: 'string', nullable: true, options: ['unsigned' => true])]
+    #[SerializedName('updated_by')]
     public ?string $updatedBy = null;
 
     #[ORM\Column(name: 'created_at', type: 'carbon', nullable: false)]
+    #[SerializedName('created_at')]
     public ?Carbon $createdAt = null;
 
     #[ORM\Column('updated_at', type: 'carbon', nullable: true)]
+    #[SerializedName('updated_at')]
     public ?Carbon $updatedAt = null;
 
     #[ORM\Column('deleted', type: 'boolean', nullable: false)]
+    #[Ignore]
     public bool $deleted = false;
+
 }

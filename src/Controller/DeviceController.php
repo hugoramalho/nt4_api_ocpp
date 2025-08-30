@@ -72,35 +72,6 @@ class DeviceController extends BaseController
         );
     }
 
-//    #[Route('/devices', methods: ['GET'], format: 'json')]
-//    public function query(
-//        #[MapQueryString]  BaseQueryParams $queryParams,
-//        Request $request
-//    ): JsonResponse
-//    {
-//        return $this->jsonResponse(
-//            $this->searchPaginated(
-//                OcppDevice::class,
-//                $queryParams,
-//                [
-//                    'like' => ['name'],
-//                    'sortMap' => ['name' => 'e.name', 'stationId' => 'e.stationId', 'createdAt' => 'e.createdAt'],
-//                    'defaultSort' => 'name',
-//                    'defaultDir'  => 'asc',
-//                    'transform' => static fn(OcppDevice $object) => [
-//                        'id' => $object->id,
-//                        'station_id' => $object->getStationId(),
-//                        'name' => $object->getName(),
-//                        'protocol_version' => $object->getProtocolVersion(),
-//                        'created_at' => $object->getCreatedAt()?->format(DATE_ATOM),
-//                    ],
-//                ]
-//            ),
-//            '',
-//            200
-//        );
-//    }
-
     /**
      * @throws ApplicationException
      * @throws ExceptionInterface
@@ -120,11 +91,11 @@ class DeviceController extends BaseController
 
     #[Route('/devices', methods: ['POST'], format: 'json')]
     public function post(
-        #[MapRequestPayload] OcppDeviceInput $terminalInput,
+        #[MapRequestPayload] OcppDeviceInput $deviceInput,
     ): JsonResponse
     {
         return $this->jsonResponse(
-            $this->deviceService->create($terminalInput),
+            $this->deviceService->create($deviceInput),
             'Device successfully created.',
             201
         );
