@@ -9,13 +9,13 @@ namespace App\Gateway\User;
 
 use App\Exception\IdpAuthException;
 use App\Gateway\AbstractGateway;
-use App\Mapper\AuthInput;
+use App\Mapper\SignInInput;
 use App\Service\AuthService;
 
 final readonly class AuthGateway extends AbstractGateway
 {
 
-    public function authenticate(AuthInput $authInput): array
+    public function authenticate(SignInInput $authInput): array
     {
         try {
             $response = $this->httpClient->request(

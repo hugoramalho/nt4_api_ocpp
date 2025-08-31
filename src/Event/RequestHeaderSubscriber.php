@@ -67,10 +67,10 @@ readonly class RequestHeaderSubscriber implements EventSubscriberInterface
         // Exemplo: Manipular headers
 //        if (
 //            !$agent = $request->headers->get('X-Client-Agent') ||
-//                !$application = $request->headers->get('X-Client-Application') ||
+//                !$application = $request->headers->get('X-Client-AccountApplication') ||
 //                    !$fingerprint = $request->headers->get('X-Fingerprint')) {
 //            throw new \Exception(
-//                "Missing 'X-Client-Agent' or 'X-Client-Application' or 'X-Fingerprint' headers."
+//                "Missing 'X-Client-Agent' or 'X-Client-AccountApplication' or 'X-Fingerprint' headers."
 //            );
 //        }
 //        $jwt = $request->headers->get('Authorization');

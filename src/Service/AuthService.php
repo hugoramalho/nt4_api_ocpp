@@ -11,7 +11,7 @@ use App\Exception\IdpAuthException;
 use App\Gateway\User\AccountOutput;
 use App\Gateway\User\AuthGateway;
 use App\Gateway\User\UserOutput;
-use App\Mapper\AuthInput;
+use App\Mapper\SignInInput;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class AuthService
@@ -30,7 +30,7 @@ class AuthService
     {
     }
 
-    public function authenticate(AuthInput $authInput): array
+    public function authenticate(SignInInput $authInput): array
     {
         return $this->authGateway->authenticate($authInput);
     }
