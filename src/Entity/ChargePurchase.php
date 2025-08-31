@@ -10,6 +10,8 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Serializer\Attribute\Ignore;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -28,11 +30,20 @@ class ChargePurchase extends BaseEntity
 
     #[ORM\ManyToOne(targetEntity: OcppDevice::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'ocpp_terminal_id', referencedColumnName: 'id', nullable: false, options: ['unsigned' => true])]
+    #[Ignore]
     public OcppDevice $terminal;
 
+    #[ORM\ManyToOne(targetEntity: OcppDevice::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'ocpp_terminal_id', referencedColumnName: 'id', nullable: false, options: ['unsigned' => true])]
+    #[Ignore]
+    public Coupon $coupon;
+
     #[ORM\Column(name: 'banking_transaction_uuid', type: 'string', nullable: true)]
+    #[Ignore]
+
     public string $purchaseTransactionUuid;
 
     #[ORM\Column(name: 'idp_account_uuid', type: 'string', nullable: true)]
+    #[SerializedName('account_uuid')]
     public string $accountUuid;
 }
