@@ -7,7 +7,7 @@
 
 namespace App\Controller;
 
-use App\Mapper\AuthInput;
+use App\Mapper\SignInInput;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +17,7 @@ class AuthController extends BaseController
 {
     #[Route('/auth', methods: ['POST'])]
     public function auth(
-        #[MapRequestPayload] AuthInput $authInput,
+        #[MapRequestPayload] SignInInput $authInput,
     ): JsonResponse
     {
         $this->validateEntity($authInput);
