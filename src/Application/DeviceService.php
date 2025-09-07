@@ -5,7 +5,7 @@
  * Created at: 25/08/2025
  **/
 
-namespace App\Service;
+namespace App\Application;
 
 use App\Entity\OcppDevice;
 use App\Entity\Station;

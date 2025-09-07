@@ -5,7 +5,7 @@
  * Created at: 20/08/2025
  **/
 
-namespace App\Service;
+namespace App\Application;
 
 use App\Exception\IdpAuthException;
 use App\Gateway\User\AccountOutput;
