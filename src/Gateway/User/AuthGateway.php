@@ -10,7 +10,7 @@ namespace App\Gateway\User;
 use App\Exception\IdpAuthException;
 use App\Gateway\AbstractGateway;
 use App\Mapper\SignInInput;
-use App\Service\AuthService;
+use App\Application\AuthService;
 
 final readonly class AuthGateway extends AbstractGateway
 {

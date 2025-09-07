@@ -7,7 +7,7 @@
 
 namespace App\Event;
 
-use App\Service\AuthService;
+use App\Application\AuthService;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;

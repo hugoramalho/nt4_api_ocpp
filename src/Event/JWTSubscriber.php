@@ -7,7 +7,7 @@
 
 namespace App\Event;
 
-use App\Service\AuthService;
+use App\Application\AuthService;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
