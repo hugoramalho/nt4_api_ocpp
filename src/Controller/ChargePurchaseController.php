@@ -8,7 +8,7 @@
 namespace App\Controller;
 
 
-use App\Service\AuthService;
+use App\Application\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Annotation\Route;

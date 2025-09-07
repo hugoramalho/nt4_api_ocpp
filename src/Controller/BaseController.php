@@ -10,7 +10,7 @@ namespace App\Controller;
 use App\Entity\BaseEntity;
 use App\Repository\BaseRepository;
 use App\Repository\BaseRepositoryTrait;
-use App\Service\AuthService;
+use App\Application\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
